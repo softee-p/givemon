@@ -1,2 +1,0 @@
-# givemon
-"Gives you 'mon."
