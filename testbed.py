@@ -2,11 +2,9 @@ import subprocess
 
 
 
-p1 = subprocess.run(["iw", "dev"], capture_output=True ,text=True)
+p1 = subprocess.Popen(["ls", "-la"], stdout=subprocess.PIPE)
 
 
 
 
-interface_count = p1.stdout.count("txpower")
-print(interface_count)
-
+print(str(p1.stdout))
