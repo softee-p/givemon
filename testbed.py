@@ -1,10 +1,10 @@
 import subprocess
 
+p = subprocess.run(['ls'], capture_output=True, text=True)
 
+print(str(p.stdout))
+# adapter_id = "wlan0"
+# keyword = "wlan"
 
-p1 = subprocess.Popen(["ls", "-la"], stdout=subprocess.PIPE)
-
-
-
-
-print(str(p1.stdout))
+# if keyword in adapter_id:
+#     print(keyword + adapter_id[len(keyword)])

@@ -4,13 +4,15 @@ import subprocess
 
 class Adapter:
 
-    def __init__(self, interface_name, device_name, driver, mode, power,):
-        self.interface_name = interface_name
+    def __init__(self, interface_id, device_name, driver, mode, power,):
+        self.interface_id = interface_id
         self.device_name = device_name
         self.driver = driver
         self.mode = mode
         self.power = power
 
+    # def initialize(self):
+        # if self.interface_id == "wlan"
 
 
 
@@ -33,10 +35,28 @@ def cmd_grep(target):
 
 
 def cmd_run(command):
+
     var = subprocess.run(command, capture_output=True, text=True, shell=True)  # example cmd_run('iw dev')
     return var.stdout
 
 
+
+def command_output_lines(command, option):
+
+    temp = subprocess.Popen([command, option], stdout=subprocess.PIPE)
+    output = str(temp.communicate())
+    print(output)
+
+    output = output.split("\n")
+    print(output)
+
+    output = output[0].split('\\')
+    print(output)
+
+    res = []
+
+    for line in output:
+        res.append(line)
 
 
 
@@ -47,10 +67,10 @@ def command_output_find(command, keyword, append):
 
     results_list = []
 
-    p1 = subprocess.run(command, capture_output=True, text=True, shell=True)
+    p1 = subprocess.run([command], capture_output=True, text=True, shell=True)
 
-
-
+    print(p1.stdout)
+    # print(p1.stdout.count(keyword))
 
     if p1.returncode == 0:
 
@@ -92,8 +112,6 @@ def command_output_find(command, keyword, append):
         print("command failed")
 
 
-#  print(command_output_find('ls', "o", "1"))
+print(command_output_find('ls -la', "li", "0"))
 
-
-
-
+# print(command_output_find('ls', "o", "5")[1])
