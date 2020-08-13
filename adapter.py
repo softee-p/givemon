@@ -1,15 +1,16 @@
+class Adapter:
 
-import subprocess
-
-
-print(command_output_find('ls', "o", "1"))
-
-''''''
-startup = input("| Hi! Setup ? |" + " YES/NO:")
-if startup != "YES":
-	print("| exiting...")
-else:
-	input("| OK! Let me discover your wireless interfaces. |" + "     | Press Enter |")
-''''''
+    def __init__(self, iface_id, device_name, driver, mode, power,):
+        self.iface_id = iface_id
+        self.device_name = device_name
+        self.driver = driver
+        self.mode = mode
+        self.power = power
 
 
+    def fullname(self):
+        return '{} {}'.format(self.device_name, self.iface_id)
+        #  print(adapter1.fullname())
+
+    # def initialize(self):
+        # if self.interface_id == "wlan"
