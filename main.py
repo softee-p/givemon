@@ -9,18 +9,23 @@ else:
     input("| OK! Let me discover your wireless interfaces. |" + "     | Press Enter |")
 '''
 
-output1 = cmd_find_words("ls -la", "a")
+iface_ids = cmd_find_words("ls -la", "a", 10)
 
-if len(output1) == 0:
-    print("| No valid wireless interface-id found. Connect an adapter and reboot.")
+if len(iface_ids) == 0:
+    print("| No valid wireless interface-id found. Connect an adapter and (preferably) reboot.")
 else:
-    iname_list = []
-    for poo in output1:
-        if poo not in iname_list:
-            iname_list.append(poo)  # remove duplicates from list
-    # print(output1)
-    iname_list.sort()
-    # print(iname_list)
+    print(iface_ids)
+    print(" ")
+    mon_iface_ids = []
+
+    for iface_id in iface_ids:              # splitting wlan and -mon adapters
+        if "at" in iface_id:
+            iface_ids.remove(iface_id)
+            mon_iface_ids.append(iface_id)
+
+    mon_iface_ids.sort()
+    iface_ids.sort()
+    print(mon_iface_ids)
 
 
 
@@ -30,4 +35,4 @@ else:
 
 
 # ifa ce_id_list = cmd_words_list("ls -la", "DS", "1")
-#  print(iface_id_list)
+#  print(iface_ids_list)
