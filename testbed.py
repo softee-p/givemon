@@ -1,8 +1,8 @@
-# import subprocess
-from my_tools import cmd_find_lines
 
-var = cmd_find_lines("ls", "-la", "a")
-print(var)
+
+
+
+
 
 
 

@@ -37,7 +37,7 @@ def cmd_find_lines(command, option, keyword):
 
 
 
-def cmd_find_words(command, keyword, maxlength):
+def cmd_find_words(command, keyword, maxlen):
     # find whole words starting with "keyword"
 
     var1 = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
@@ -48,10 +48,10 @@ def cmd_find_words(command, keyword, maxlength):
         all_results = []
         for word in output_list:
             if keyword in word and word not in all_results:     # remove duplicates
-                if maxlength == 0:
+                if maxlen == 0:
                     all_results.append(word[word.find(keyword):])   # append all words containing the keyword
                 else:
-                    all_results.append(word[word.find(keyword):word.find(keyword) + maxlength])
+                    all_results.append(word[word.find(keyword):word.find(keyword) + maxlen])
 
         all_results.sort()
         if len(all_results) == 0:

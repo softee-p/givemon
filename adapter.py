@@ -1,6 +1,6 @@
 class Adapter:
 
-    def __init__(self, iface_id, device_name, driver, mode, power,):
+    def __init__(self, iface_id="none", device_name="none", driver="none", mode="none", power="none",):
         self.iface_id = iface_id
         self.device_name = device_name
         self.driver = driver
