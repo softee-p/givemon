@@ -1,6 +1,6 @@
 class Adapter:
 
-    def __init__(self, iface_id="none", device_name="none", driver="none", mode="none", power="none",):
+    def __init__(self, iface_id="none", device_name="none", driver="none", mode="nonelol", power="none",):
         self.iface_id = iface_id
         self.device_name = device_name
         self.driver = driver
@@ -8,8 +8,8 @@ class Adapter:
         self.power = power
 
 
-    def fullname(self):
-        return '{} {}'.format(self.device_name, self.iface_id)
+    def present(self):
+        return '{} {} {} {} {}'.format(self.iface_id, self.device_name, self.driver, self.mode, self.power)
         #  print(adapter1.fullname())
 
     # def initialize(self):
