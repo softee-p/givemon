@@ -2,52 +2,56 @@ import subprocess
 from adapter import Adapter
 
 
+# for wlan and -mon on linux: ('iw dev', "wlan", "mon", 5, 8)
+def create_adapter_class(command, keyword, mon_keyword, minlen, maxlen):
 
-def create_adapter_class():
-    keyword = "admin"
-    maxlen = 8
-
-
-    var1 = subprocess.Popen(['ls -la'], stdout=subprocess.PIPE, shell=True)
-    output = str(var1.communicate())
+    # Popen output & error gatekeeper
+    var1 = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
     if var1.returncode == 0:
-        output_list = output.split()  # split string at every space
+        return print("Subprocess-command failed. Exit code ", var1.returncode)
 
-        all_results = []
-        for word in output_list:
-            if keyword in word and word not in all_results:     # remove duplicates
-                if maxlen == 0:
-                    all_results.append(word[word.find(keyword):])   # append all words containing the keyword
-                else:
-                    all_results.append(word[word.find(keyword):word.find(keyword) + maxlen])
+    # split string at every space
+    output = str(var1.communicate())
+    output_list = output.split()
 
-        all_results.sort()
-        if len(all_results) == 0:
-            return print("No matching words found")
-    else:
-        return print("Command failed. Exit code ", var1.returncode)
-    if len(all_results) == 0:
-        return print("| No valid wireless interface-id found. Plug in an adapter.")
+    # append keyword matches
+    # if maxlen 0 append whole words from start of keyword
+    wlanx_results = []
+    for word in output_list:
+        if keyword in word and word not in wlanx_results:     # remove duplicates
+            if maxlen == 0:
+                wlanx_results.append(word[word.find(keyword):])   # append all words containing the keyword
+            else:
+                wlanx_results.append(word[word.find(keyword):word.find(keyword) + maxlen])
+
+    # Append mon_keyword matches.
+    wlanx_results.sort()
+    mon_results = []
+    for iface_id in wlanx_results:
+        if mon_keyword in iface_id and iface_id not in mon_results:
+            mon_results.append(iface_id)      # splitting wlan and -mon adapters
+        if len(iface_id) > minlen:
+            wlanx_results.remove(iface_id)
+
+    mon_results.sort()
+    wlanx_results.sort()
+    wlanx_classes_list = []
+
+    for iface_id in wlanx_results:
+        wlanx_classes_list.append(Adapter(iface_id))  # convert adapters to class objects
+    mon_classes_list = []
+    for iface_id in mon_results:
+        mon_classes_list.append(Adapter(iface_id))
+
+    return wlanx_classes_list, mon_classes_list
 
 
-
-
-    mon_all_results = []
-    for iface_id in all_results:
-        if "ad" in iface_id:
-            mon_all_results.append(iface_id)      # splitting wlan and -mon adapters
-        if len(iface_id) > 5:
-            all_results.remove(iface_id)
-    mon_all_results.sort()
-    all_results.sort()
-
-    adapters = []
-    for iface_id in all_results:
-        adapters.append(Adapter(iface_id))      # convert adapters to class objects
-
-    return adapters, mon_all_results
-
-
-#  adapter0 = create_adapter_class()[0].iface_id)
+# ------------------------------|TEST|------------------------------
+# test1 = create_adapter_class('ls -la', "wlan", "mon", 5, 8)
+# print(test1)
+# adapter_class_list = create_adapter_class()[0]
+# print(adapter_class_list)
+# adapter0 = adapter_class_list[0]
+# print(adapter0.mode)
 
 #  TODO: Push to new linux branch for testing. *CHANGE KEYWORDS ONLY*

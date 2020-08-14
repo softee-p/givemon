@@ -1,45 +1,35 @@
 # import subprocess
-from my_tools import cmd_find_words
-from adapter import Adapter
+from init_adapter import create_adapter_class
 
 '''
 startup_message = input("| Hi! Setup ? |" + " YES/NO:")
 if startup_message != "YES":
     print("| exiting...")
+    raise SystemExit
 else:
     input("| OK! Let me discover your wireless interfaces. |" + "     | Press Enter |")
 '''
 
-iface_ids = cmd_find_words("ls -la", "admin", 10)
+results = create_adapter_class('ls -la', "admin", "a", 5, 8)
+# for wlan(x) and -mon on linux: ('iw dev', "wlan", "mon", 5, 8)
+print(results)
 
-if len(iface_ids) == 0:
-    print("| No valid wireless interface-id found. Plug in an adapter.")
+wlan_class_list = create_adapter_class('ls -la', "admin", "a", 5, 8)[0]
+mon_class_list = create_adapter_class('ls -la', "admin", "a", 5, 8)[1]
+
+# Status
+print('| Found {} wlan(x) interface names.'.format(len(wlan_class_list)))
+print('| Found {} -mon in interface names.'.format(len(mon_class_list)))
+
+# Gatekeeper
+if len(wlan_class_list) == 0 and len(mon_class_list) == 0:
+    print("No valid interface names found. Make sure they are up.")
+    raise SystemExit
+elif len(wlan_class_list) == 0:
+    print("Make sure you have at least 1 interface in managed mode to continue.")
     raise SystemExit
 
-print(iface_ids)
-print(" ")
 
 
-mon_iface_ids = []
-for iface_id in iface_ids:
-    if "ad" in iface_id:
-        mon_iface_ids.append(iface_id)      # splitting wlan and -mon adapters
-    if len(iface_id) > 5:
-        iface_ids.remove(iface_id)
-
-mon_iface_ids.sort()
-iface_ids.sort()
-print(mon_iface_ids)
-print(iface_ids)
-
-adapters = []
-for iface_id in iface_ids:
-    adapters.append(Adapter(iface_id))
-
-print('| adapters in managed mode: {}'.format(len(adapters)))
-print('| adapters in monitor mode: {}'.format(len(mon_iface_ids)))
-# ifa ce_id_list = cmd_words_list("ls -la", "DS", "1")
-#  print(iface_ids_list)
-
-
-# TODO: Test if new function init_adapter can replace this.
+# adapter0 = wlan_class_list[0]
+# print(adapter0)

@@ -41,24 +41,25 @@ def cmd_find_words(command, keyword, maxlen):
     # find whole words starting with "keyword"
 
     var1 = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
-    output = str(var1.communicate())
     if var1.returncode == 0:
-        output_list = output.split()  # split string at every space
+        return print("Subprocess-command failed. Exit code ", var1.returncode)
 
-        all_results = []
-        for word in output_list:
-            if keyword in word and word not in all_results:     # remove duplicates
-                if maxlen == 0:
-                    all_results.append(word[word.find(keyword):])   # append all words containing the keyword
-                else:
-                    all_results.append(word[word.find(keyword):word.find(keyword) + maxlen])
+    output = str(var1.communicate())
+    output_list = output.split()  # split string at every space
+    all_results = []
 
-        all_results.sort()
-        if len(all_results) == 0:
-            print("No matching words found")
-        return all_results
-    else:
-        print("Command failed. Exit code ", var1.returncode)
+    for word in output_list:
+        if keyword in word and word not in all_results:     # remove duplicates
+            if maxlen == 0:
+                all_results.append(word[word.find(keyword):])   # append all words containing the keyword
+            else:
+                all_results.append(word[word.find(keyword):word.find(keyword) + maxlen])
+
+    if len(all_results) == 0:
+        return print("No matching words found")
+    all_results.sort()
+    return all_results
+
 
 
 
