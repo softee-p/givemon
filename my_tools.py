@@ -3,41 +3,38 @@ import subprocess
 
 def cmd_grep(target):
     grep_list = subprocess.run(['iw', 'dev'], capture_output=True, text=True)
-
     if grep_list.returncode == 0:
-
-        interface_name0 = subprocess.run(['grep', target], stdout=subprocess.PIPE, text=True,
-                                         input=grep_list.stdout)
-
-        if interface_name0.stdout != "":
-            return grep_list.stdout
-
-    else:
-        print("Command failed. Exit code ", grep_list.returncode)
+        return print("Command failed. Exit code ", grep_list.returncode)
+    interface_name0 = subprocess.run(['grep', target], stdout=subprocess.PIPE, text=True, input=grep_list.stdout)
+    if interface_name0.stdout != "":
+        return grep_list.stdout
 
 
-def cmd_find_lines(command, option, keyword):
-    temp = subprocess.Popen([command, option], stdout=subprocess.PIPE)
+
+
+
+def cmd_find_lines(command, keyword=" "):
+    # if keyword == False deactivate search.
+
+    temp = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
     output = str(temp.communicate())
 
-    if temp.returncode == 0:
+    if temp.returncode != 0:
+        return "Exit code: |", temp.returncode, "| Command failed."
 
-        output = output.split("\n")
-        output = output[0].split('\\')
+    output = output.split("\n")
+    output = output[0].split('\\')
+    if keyword == " ":
+        return output
 
-        output_list = []
-        for line in output:
-            if keyword in line and line not in output_list:
-                output_list.append(line)
-        return output_list
-
-    else:
-        print("Command failed. Exit code ", temp.returncode)
-
-
+    output_list = []
+    for line in output:
+        if keyword in line and line not in output_list:
+            output_list.append(line)
+    return output_list
 
 
-def cmd_find_words(command, keyword, maxlen):
+def cmd_find_words(command, keyword=" ", maxlen=0):
     # find whole words starting with "keyword"
 
     var1 = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
@@ -46,12 +43,13 @@ def cmd_find_words(command, keyword, maxlen):
 
     output = str(var1.communicate())
     output_list = output.split()  # split string at every space
+    if keyword == " ":
+        return output_list
     all_results = []
-
     for word in output_list:
-        if keyword in word and word not in all_results:     # remove duplicates
+        if keyword in word and word not in all_results:  # remove duplicates
             if maxlen == 0:
-                all_results.append(word[word.find(keyword):])   # append all words containing the keyword
+                all_results.append(word[word.find(keyword):])  # append word from start of keyword until the end
             else:
                 all_results.append(word[word.find(keyword):word.find(keyword) + maxlen])
 
@@ -61,40 +59,27 @@ def cmd_find_words(command, keyword, maxlen):
     return all_results
 
 
+def cmd_find_segments(command, split, include=True, keyword=""):
+    # On linux: cmd_find_segments('usb-devices', "Por", True, "t=")
+    # Simple use: cmd_find_segments(command,split)
+    # split and include only words starting with key: cmd_find_segments("ls -la", "Jul", True, "22"))
 
+    temp1 = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True, text=True)
 
+    output = str(temp1.communicate())
 
-
-
-
-
-
-
-
-
-def cmd_find_words_old(command, keyword, append):
-    results_list = []
-
-    p1 = subprocess.run([command], capture_output=True, text=True, shell=True)
-
-    # print(p1.stdout.count(keyword))
-
-    if p1.returncode == 0:
-
-        if p1.stdout.count(keyword) != 0:
-            #  print("Found ", p1.stdout.count(keyword), "words containing the keyword:", keyword)
-
-            pos1 = p1.stdout.find(keyword)
-            pos2 = p1.stdout.find(keyword, pos1 + len(keyword) + int(append))
-
-            for poopoo in range(p1.stdout.count(keyword)):
-                results_list.append(p1.stdout[pos1:pos1 + len(keyword) + int(append)])
-
-                pos1 = pos2
-
-        else:
-            print("keyword found 0 times.")
-
+    output_split = output.split(split)
+    print(output)
+    print(output_split)
+    if keyword == "":
+        return output_split
+    if include:
+        for block in output_split:
+            if keyword not in block[:2]:
+                output_split.remove(block)
+        return output_split
     else:
-        print("command failed")
-    return results_list
+        for block in output_split:
+            if keyword in block[:2]:
+                output_split.remove(block)
+        return output_split
