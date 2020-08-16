@@ -1,14 +1,18 @@
-x = 2
+from my_tools import cmd_find_segments
+
+var1 = cmd_find_segments("ls -la", "Jul", True, "22")
 
 
-my_list = [x, "text", True]
 
 
-y = my_list[1]
-print(y)
-"""
-text1 = "Example wlan of wlan0 andwlan1 so wlan2can be tested. "
-text2 = text1.split( )
-print(text2)
-keyword = "a"
-"""
+
+
+
+# TODO test on linux: cmd_find_segments('usb-devices', "Por", True, "t=")
+'''
+output2 = output.split('\n')
+print(output2)
+output3 = output2[0].split('\\')
+
+print(output3)
+'''
