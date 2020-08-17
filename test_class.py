@@ -1,4 +1,4 @@
-# from init_adapter import create_adapter_instance
+from init_adapter import create_adapter_instance
 import subprocess
 
 
@@ -6,7 +6,7 @@ class Device:
 
     def __init__(self):
         self.bus = {}
-        self.bus_device = {}
+        self.bus_device_nr = {}
         self.vendor_id = {}
         self.product_id = {}
         self.vendor_name = {}
@@ -24,17 +24,22 @@ class WirelessAdapter(Device):
     def __init__(self):
         super().__init__()
         self.tx_power = {}
-        self.capabilities = []
-        self.mode = {}
 
         self.interfaces = []
 
+    def enumerate(self):
+        temp = create_adapter_instance('ls -la', "admin", "a", 5, 8)
+        wlanx = temp[0]
+        mon = temp[1]
+        for iface_id in wlanx:
+            if iface_id:
+                self.interfaces.append(Interface(iface_id))
 
-    def check_monitor(self, keyword):
-        var1 = subprocess.Popen(['ls -la'], stdout=subprocess.PIPE, shell=True)
-        output = str(var1.communicate())
-        if keyword in output:
-            self.capabilities.append("monitor")
+
+
+
+
+
 
 
 
@@ -49,10 +54,23 @@ class Interface:
         self.iface_id = iface_id
         self.isup = False
         self.mode = {}
-        self.type = {}
+        self.test = False
+
+    def check_monitor(self, keyword):
+        var1 = subprocess.Popen(['ls -la'], stdout=subprocess.PIPE, shell=True)
+        output = str(var1.communicate())
+        if keyword in output:
+            self.mode = "monitor"
 
 
 
+
+# TODO: Crete class instances from results
+
+# wlan_list = Interface.enumerate()[0]
+# print(wlan_list)
+# mon_list = Interface.enumerate()[1]
+# print(wlan_list)
 '''
 usb1 = classes_list[0]
 

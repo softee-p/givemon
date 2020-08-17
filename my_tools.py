@@ -1,7 +1,11 @@
 import subprocess
 
 
-def cmd_grep(target):
+def find_value_of():
+    pass
+
+
+def cmd_grep(target):  # TODO: Update func
     grep_list = subprocess.run(['iw', 'dev'], capture_output=True, text=True)
     if grep_list.returncode == 0:
         return print("Command failed. Exit code ", grep_list.returncode)
@@ -10,17 +14,16 @@ def cmd_grep(target):
         return grep_list.stdout
 
 
-
-
-
 def cmd_find_lines(command, keyword=" "):
     # if keyword == False deactivate search.
 
-    temp = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
-    output = str(temp.communicate())
+    var1 = subprocess.Popen([command], universal_newlines=True,
+                            stdout=subprocess.PIPE, shell=True,
+                            stderr=subprocess.PIPE, )
+    output, error = var1.communicate()
 
-    if temp.returncode != 0:
-        return "Exit code: |", temp.returncode, "| Command failed."
+    if var1.returncode != 0:
+        return print("Subprocess-command failed. Exit code: ", var1.returncode, "Error: ", error)
 
     output = output.split("\n")
     output = output[0].split('\\')
@@ -34,14 +37,18 @@ def cmd_find_lines(command, keyword=" "):
     return output_list
 
 
-def cmd_find_words(command, keyword=" ", maxlen=0):
+def cmd_find_words(command, keyword=" ", maxlen=0):     # Linux: ('ifconfig', "wlan", "mon", 5, 8)
     # find whole words starting with "keyword"
 
-    var1 = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
-    if var1.returncode == 0:
-        return print("Subprocess-command failed. Exit code ", var1.returncode)
+    var1 = subprocess.Popen([command], universal_newlines=True,
+                            stdout=subprocess.PIPE, shell=True,
+                            stderr=subprocess.PIPE, )
 
-    output = str(var1.communicate())
+    output, error = var1.communicate()
+
+    if var1.returncode != 0:
+        return print("Subprocess-command failed. Exit code: ", var1.returncode, "Error: ", error)
+
     output_list = output.split()  # split string at every space
     if keyword == " ":
         return output_list
@@ -59,27 +66,26 @@ def cmd_find_words(command, keyword=" ", maxlen=0):
     return all_results
 
 
-def cmd_find_segments(command, split, include=True, keyword=""):
-    # On linux: cmd_find_segments('usb-devices', "Por", True, "t=")
-    # Simple use: cmd_find_segments(command,split)
+def cmd_find_segments(command, split, exclude=" "):
+    # ('usb-devices', "Po", False, "rt=00")
     # split and include only words starting with key: cmd_find_segments("ls -la", "Jul", True, "22"))
 
-    temp1 = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True, text=True)
+    var1 = subprocess.Popen([command], universal_newlines=True,
+                            stdout=subprocess.PIPE, shell=True,
+                            stderr=subprocess.PIPE, )
+    output, error = var1.communicate()
 
-    output = str(temp1.communicate())
-
+    if var1.returncode != 0:
+        return print("Subprocess-command failed. Exit code: ", var1.returncode, "Error: ", error)
     output_split = output.split(split)
     print(output)
     print(output_split)
-    if keyword == "":
+
+    if exclude == " ":
         return output_split
-    if include:
-        for block in output_split:
-            if keyword not in block[:2]:
-                output_split.remove(block)
-        return output_split
-    else:
-        for block in output_split:
-            if keyword in block[:2]:
-                output_split.remove(block)
+
+    for block in output_split:
+        if exclude in block:
+            print(block)
+            output_split.remove(block)
         return output_split
