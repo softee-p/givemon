@@ -66,7 +66,7 @@ def cmd_find_words(command, keyword=" ", maxlen=0):     # Linux: ('ifconfig', "w
     return all_results
 
 
-def cmd_find_segments(command, split, exclude=" "):
+def cmd_find_segments(command, split, keyword=""):
     # ('usb-devices', "Po", False, "rt=00")
     # split and include only words starting with key: cmd_find_segments("ls -la", "Jul", True, "22"))
 
@@ -78,14 +78,13 @@ def cmd_find_segments(command, split, exclude=" "):
     if var1.returncode != 0:
         return print("Subprocess-command failed. Exit code: ", var1.returncode, "Error: ", error)
     output_split = output.split(split)
-    print(output)
-    print(output_split)
-
-    if exclude == " ":
+    # print(output)
+    # print(output_split)
+    if keyword == "":
         return output_split
-
-    for block in output_split:
-        if exclude in block:
-            print(block)
-            output_split.remove(block)
-        return output_split
+    results = []
+    for line in output_split:
+        if line.count(keyword) > 0:
+            results.append(line)
+    # print(output_split)
+    return results
