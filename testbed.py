@@ -1,9 +1,8 @@
 from my_tools import cmd_find_segments
 
 
-
-
 # Find usb adapters
+
 
 xa = cmd_find_segments("usb-devices", "Bus", "802.11")
 
