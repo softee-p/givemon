@@ -67,7 +67,7 @@ def cmd_find_words(command, keyword=" ", maxlen=0):     # Linux: ('ifconfig', "w
 
 
 def cmd_find_segments(command, split, keyword=""):
-    # ('usb-devices', "Po", False, "rt=00")
+    # ('usb-devices', "Bus", "802.11")
     # split and include only words starting with key: cmd_find_segments("ls -la", "Jul", True, "22"))
 
     var1 = subprocess.Popen([command], universal_newlines=True,
@@ -84,7 +84,7 @@ def cmd_find_segments(command, split, keyword=""):
         return output_split
     results = []
     for line in output_split:
-        if line.count(keyword) > 0:
+        if keyword in line:
             results.append(line)
     # print(output_split)
     return results

@@ -3,33 +3,18 @@ from my_tools import cmd_find_segments
 
 
 
-# Find usb devices
-xa = cmd_find_segments("ls -la", "admin", "704")[0][0]
-xb = cmd_find_segments("ls -la", "admin", "704")[1]
+# Find usb adapters
 
-print(xa)
-print(xb)
-# find values
+xa = cmd_find_segments("usb-devices", "Bus", "802.11")
 
+keyword = "Driver"
+num_of_adapters = len(xa)
+print(num_of_adapters)
 
+new_results = []
 
+for x in range(len(xa)):
+	if keyword in xa[x]:
+		new_results.append(xa[x][xa[x].find(keyword) + len(keyword):])
 
-
-
-
-# TODO test on linux: cmd_find_segments('usb-devices', "Po", False, "rt=00")
-'''Test1
-output2 = output.split('\n')
-print(output2)
-output3 = output2[0].split('\\')
-
-print(output3)
-----------------------Test2
-var = cmd_find_segments("ls -la", "adm")
-print(var)
-
-for line in var:
-    if "root" in line:
-        var.remove(line)
-print(var)
-'''
+print(new_results)
