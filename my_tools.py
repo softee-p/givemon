@@ -84,7 +84,7 @@ def cmd_find_segments(command, split, keyword=""):
         return output_split
     results = []
     for line in output_split:
-        if line.count(keyword) > 0:
+        if keyword in line:
             results.append(line)
     # print(output_split)
     return results

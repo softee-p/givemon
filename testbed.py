@@ -3,13 +3,6 @@ from my_tools import cmd_find_segments
 
 
 
-# Find usb devices
-xa = cmd_find_segments("ls -la", "admin", "704")[0][0]
-xb = cmd_find_segments("ls -la", "admin", "704")[1]
-
-print(xa)
-print(xb)
-# find values
 
 
 
