@@ -1,10 +1,9 @@
 import subprocess
-from adapter import Adapter
 
 
+# TODO Refactor: first segment is useless/already exists in search tool
 # for wlan and -mon on linux: ('ifconfig', "wlan", "mon", 5, 8)
 def create_adapter_instance(command, keyword, mon_keyword, minlen, maxlen):
-
     # Popen output & error gatekeeper
     var1 = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
     if var1.returncode == 0:
@@ -24,6 +23,7 @@ def create_adapter_instance(command, keyword, mon_keyword, minlen, maxlen):
             else:
                 wlanx_results.append(word[word.find(keyword):word.find(keyword) + maxlen])
 
+# TODO Refactor: following segment is reusable for wlanx/mon search:
     # Split keyword and mon_keyword results into lists.
     wlanx_results.sort()
     mon_results = []
@@ -35,25 +35,23 @@ def create_adapter_instance(command, keyword, mon_keyword, minlen, maxlen):
 
     mon_results.sort()
     wlanx_results.sort()
+    return wlanx_results, mon_results
 
 
-    # matched keywords become interface ids. create 2 list of classes for each.
+
+"""
+# matched keywords become interface ids. create 2 list of classes for each.
+
     wlanx_classes_list = []
     for iface_id in wlanx_results:
-        wlanx_classes_list.append(Adapter(iface_id))
+        wlanx_classes_list.append(Interface(iface_id))
     mon_classes_list = []
     for iface_id in mon_results:
-        mon_classes_list.append(Adapter(iface_id))
+        mon_classes_list.append(Interface(iface_id))
+OR
+    Interface(iface_id)
+
+
 
     return wlanx_classes_list, mon_classes_list
-
-
-#  TODO: Push to new linux branch for testing. *CHANGE KEYWORDS ONLY*
-#        Also make class-creation part more universal in usage.
-# ------------------------------|TEST|------------------------------
-# test1 = create_adapter_instance('ls -la', "wlan", "mon", 5, 8)
-# print(test1)
-# adapter_class_list = create_adapter_instance()[0]
-# print(adapter_class_list)
-# adapter0 = adapter_class_list[0]
-# print(adapter0.mode)
+"""
