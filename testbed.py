@@ -12,9 +12,11 @@ num_of_adapters = len(xa)
 print(num_of_adapters)
 
 new_results = []
-
+print(xa)
 for x in range(len(xa)):
-	if keyword in xa[x]:
-		new_results.append(xa[x][xa[x].find(keyword) + len(keyword):])
+	xa[x] = xa[x].split("\n")
+	for word in xa[x]:
+		if keyword in word:
+			new_results.append(word[word.find(keyword) + len(keyword):])
 
 print(new_results)
