@@ -20,11 +20,13 @@ for x in range(len(xa)):
 	for sentence in xa[x]:
 		sentence = sentence.split()
 		print(sentence)
-		for word in sentence:
+		for (i, word) in enumerate(sentence):
 			for keyword in keywords:
 				if keyword in word:
 					if len(word) == len(keyword):
 						print("result is in next word")
+						print(sentence[i])
+						temp_results.append(sentence[i])
 					else:
 						temp_results.append(word[word.find(keyword) + len(keyword):])
 	if temp_results != []:
