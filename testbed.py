@@ -10,12 +10,13 @@ keyword = "Driver"
 num_of_adapters = len(xa)
 print(num_of_adapters)
 
-new_results = []
+results = []
 print(xa)
 for x in range(len(xa)):
 	xa[x] = xa[x].split("\n")
+	temp_results = []
 	for word in xa[x]:
 		if keyword in word:
-			new_results.append(word[word.find(keyword) + len(keyword):])
-
-print(new_results)
+			temp_results.append(word[word.find(keyword) + len(keyword):])
+	results.append(temp_results)
+print(results)
