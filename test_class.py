@@ -3,28 +3,28 @@
 
 class Device:
 
-    def __init__(self, some_list, version, version_id, product_id, manufacturer, device_type, serial, mxpwr, driver):
-        self.bus_device_num = some_list
+    def __init__(self, bus_device_num, version, version_id, product_id,
+                 manufacturer, device_type, serial, maxpwr, driver):
+        self.bus_device_num = bus_device_num
         self.version = version
         self.vendor_id = version_id
         self.product_id = product_id
         self.manufacturer = manufacturer
         self.device_type = device_type
         self.serial = serial
-        self.mxpwr = mxpwr
+        self.maxpwr = maxpwr
         self.driver = driver
-
-        self.mac = {}
-
-
 
 
 class WirelessAdapter(Device):
 
-    def __init__(self, some_list, version, version_id, product_id, manufacturer, device_type, serial, mxpwr, driver):
-        super().__init__(some_list, version, version_id, product_id, manufacturer, device_type, serial, mxpwr, driver)
+    def __init__(self, bus_device_num, version, version_id, product_id,
+                 manufacturer, device_type, serial, maxpwr, driver):
+        super().__init__(bus_device_num, version, version_id, product_id,
+                         manufacturer, device_type, serial, maxpwr, driver)
 
         self.interfaces = []
+        self.mac = {}
 
 
     def add_interface(self, interface):
