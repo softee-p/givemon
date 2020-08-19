@@ -1,46 +1,30 @@
-from init_adapter import create_adapter_instance
-import subprocess
+
 
 
 class Device:
 
-    def __init__(self):
-        self.bus = {}
-        self.bus_device_nr = {}
-        self.vendor_id = {}
-        self.product_id = {}
-        self.vendor_name = {}
-        self.product_name = {}
+    def __init__(self, some_list, version, version_id, product_id, manufacturer, device_type, serial, mxpwr, driver):
+        self.bus_device_num = some_list
+        self.version = version
+        self.vendor_id = version_id
+        self.product_id = product_id
+        self.manufacturer = manufacturer
+        self.device_type = device_type
+        self.serial = serial
+        self.mxpwr = mxpwr
+        self.driver = driver
 
         self.mac = {}
-        self.driver = {}
 
-        self.purpose = {}
 
 
 
 class WirelessAdapter(Device):
 
-    def __init__(self):
-        super().__init__()
-        self.tx_power = {}
+    def __init__(self, some_list, version, version_id, product_id, manufacturer, device_type, serial, mxpwr, driver):
+        super().__init__(some_list, version, version_id, product_id, manufacturer, device_type, serial, mxpwr, driver)
 
         self.interfaces = []
-
-    def enumerate(self):
-        temp = create_adapter_instance('ls -la', "admin", "a", 5, 8)
-        wlanx = temp[0]
-        mon = temp[1]
-        for iface_id in wlanx:
-            if iface_id:
-                self.interfaces.append(Interface(iface_id))
-
-
-
-
-
-
-
 
 
     def add_interface(self, interface):
@@ -55,14 +39,6 @@ class Interface:
         self.isup = False
         self.mode = {}
         self.test = False
-
-    def check_monitor(self, keyword):
-        var1 = subprocess.Popen(['ls -la'], stdout=subprocess.PIPE, shell=True)
-        output = str(var1.communicate())
-        if keyword in output:
-            self.mode = "monitor"
-
-
 
 
 # TODO: Crete class instances from results

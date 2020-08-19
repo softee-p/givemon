@@ -1,9 +1,6 @@
 import subprocess
 
 
-def find_value_of():
-    pass
-
 
 def cmd_grep(target):  # TODO: Update func
     grep_list = subprocess.run(['iw', 'dev'], capture_output=True, text=True)
@@ -88,3 +85,56 @@ def cmd_find_segments(command, split, keyword=""):
             results.append(line)
     # print(output_split)
     return results
+
+
+def cmd_find_values(command, segment_split, only_with, keywords_list):
+    var1 = subprocess.Popen([command], universal_newlines=True,
+                            stdout=subprocess.PIPE, shell=True,
+                            stderr=subprocess.PIPE, )
+    output, error = var1.communicate()
+    if var1.returncode != 0:
+        return print("Subprocess-command failed. Exit code: ", var1.returncode, "Error: ", error)
+    output_split = output.split(segment_split)
+
+    valid_segments = []
+    for segment in output_split:
+        if only_with in segment:
+            valid_segments.append(segment)
+
+    num_of_devices = len(valid_segments)
+    print(num_of_devices)
+    results = []
+
+    for x in range(len(valid_segments)):
+        temp_results = []
+        valid_segments[x] = valid_segments[x].split("\n")
+        for keyword in keywords_list:
+            times_found = 0
+            for sentence in valid_segments[x]:
+                sentence = sentence.split()
+                for (i, word) in enumerate(sentence):
+                    if keyword in word:
+                        times_found += 1
+                        if len(word) == len(keyword):
+                            # print("result is in next word")
+                            # print(sentence[i])
+                            temp_results.append(sentence[i + 1])
+                        else:
+                            temp_results.append(word[word.find(keyword) + len(keyword):])
+            # print(times_found)
+            if times_found == 0:
+                temp_results.append("unknown")
+        if temp_results != []:
+            results.append(temp_results)
+    return results
+
+
+
+"""
+TEST: OK!
+
+listog = ["admin", "poo"]
+var2 = cmd_find_values("ls -la", "\n", "admin", listog)
+
+print(var2)
+"""
