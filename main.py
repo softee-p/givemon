@@ -1,5 +1,5 @@
 # import subprocess
-from init_adapter import create_adapter_instance
+from init_interfaces import create_adapter_instance
 
 '''
 startup_message = input("| Hi! Setup ? |" + " YES/NO:")
