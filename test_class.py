@@ -2,9 +2,8 @@ from my_tools import cmd_find_values
 
 
 class Device:
-    list_wireless = []
-    list_misc = []
-
+    wireless = []
+    misc = []
     _init_keywords = ["Dev#=", "Ver=", "Vendor=", "ProdID=", "Manufacturer=",
                       "Product=", "SerialNumber=", "MxPwr=", "Driver="]
 
@@ -22,22 +21,23 @@ class Device:
 
     @classmethod
     def enumerate(cls):
-        Device.list_wireless = []
-        Device.list_misc = []
+        Device.wireless = []  # empty lists on re.
+        Device.misc = []
         re = cmd_find_values("usb-devices", Device._init_keywords, "Bus=",
                              ["Driver=hub"], ["Product=802.11", "Driver="])
         devices = re[0]
         # devices_count = re[1]
         for item in devices:
             if "802.11" in item[5]:
-                Device.list_wireless.append(Wireless(item[0], item[1], item[2], item[3], item[4],
-                                                     item[5], item[6], item[7], item[8]))
+                Device.wireless.append(Wireless(item[0], item[1], item[2], item[3], item[4],
+                                                item[5], item[6], item[7], item[8]))
             else:
-                Device.list_misc.append(Device(item[0], item[1], item[2], item[3], item[4],
-                                               item[5], item[6], item[7], item[8]))
+                Device.misc.append(Device(item[0], item[1], item[2], item[3], item[4],
+                                          item[5], item[6], item[7], item[8]))
 
 
 class Wireless(Device):
+    _init_keywords = ["description:", "id:", "name:", "serial:", "driver=", "ip=", "wireless="]
 
     def __init__(self, bus_id, version, version_id, product_id,
                  manufacturer, product_type, serial, maxpwr, driver):
@@ -45,7 +45,17 @@ class Wireless(Device):
                          manufacturer, product_type, serial, maxpwr, driver)
 
         self.interfaces = []
-        self.mac = {}
+
+        self._enumerate()
+        self.mac = self.interfaces[0].mac
+
+    def _enumerate(self):
+        re = cmd_find_values("lshw -C network", Wireless._init_keywords, "*-")
+        interfaces = re[0]
+        for item in interfaces:
+            if self.driver == item[5]:
+                self.interfaces.append(Interface(item[0], item[1], item[2],
+                                                 item[3], item[4], item[5], item[7]))
 
     def add_interface(self, interface):
         self.interfaces.append(interface)
@@ -53,17 +63,18 @@ class Wireless(Device):
 
 class Interface:
 
-    def __init__(self, iface_id, serial, driver):
+    def __init__(self, description, physical_id, iface_id, mac, driver, ip_addr, wireless_type):
+        self.description = description
+        self.physical_id = physical_id
         self.iface_id = iface_id
-        self.serial = serial
+        self.mac = mac
         self.driver = driver
+        self.ip_addr = ip_addr
+        self.wireless_type = wireless_type
+
         self.isup = False
         self.mode = {}
         self.test = False
-
-    @classmethod
-    def create_interface(cls, iface_id, serial, driver):
-        return Interface(iface_id, serial, driver)
 
 
 # interface_1 = Interface.create_interface("wlan0")
