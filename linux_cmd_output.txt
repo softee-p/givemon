@@ -11,10 +11,36 @@ Bus 001 Device 003: ID 0424:2514 Microchip Technology, Inc. (formerly SMSC) USB 
 Bus 001 Device 002: ID 0424:2514 Microchip Technology, Inc. (formerly SMSC) USB 2.0 Hub
 Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
-			====
+			====airmon-ng| NORMAL=====
+
+PHY     Interface       Driver          Chipset
+
+phy0    wlan0           brcmfmac        Broadcom 43430
+phy2    wlan1           88XXau          TP-Link 
+null    wlan2           r8188eu         TP-Link TL-WN722N v2
 
 
-			====iwconfig===
+
+
+
+			====airmon-ng| WITH MON====
+
+PHY     Interface       Driver          Chipset
+
+phy0    wlan0           brcmfmac        Broadcom 43430
+phy0    wlan0mon        brcmfmac        Broadcom 43430
+
+                (mac80211 station mode vif already available for [phy0]wlan0mon on [phy0]wlan0)
+
+                (mac80211 monitor mode vif disabled for [phy0]wlan0mon)
+phy2    wlan1           88XXau          TP-Link 
+null    wlan2           r8188eu         TP-Link TL-WN722N v2
+
+
+
+
+
+			====iwconfig| NORMAL====
 
 wlan0     IEEE 802.11  ESSID:"iPhone"  
           Mode:Managed  Frequency:2.412 GHz  Access Point: 8E:75:9D:A4:87:DF   
@@ -46,6 +72,36 @@ wlan2     unassociated  ESSID:""  Nickname:"<WIFI@REALTEK>"
           Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
           Tx excessive retries:0  Invalid misc:0   Missed beacon:0
 
+			====iwconfig| WITH MON=====
+wlan0     IEEE 802.11  ESSID:off/any  
+          Mode:Managed  Access Point: Not-Associated   
+          Retry short limit:7   RTS thr:off   Fragment thr:off
+          Encryption key:off
+          Power Management:on
+          
+eth0      no wireless extensions.
+
+lo        no wireless extensions.
+
+wlan1     IEEE 802.11  ESSID:off/any  
+          Mode:Managed  Access Point: Not-Associated   Tx-Power=18 dBm   
+          Retry short limit:7   RTS thr:off   Fragment thr:off
+          Encryption key:off
+          Power Management:off
+          
+wlan2     unassociated  ESSID:""  Nickname:"<WIFI@REALTEK>"
+          Mode:Managed  Frequency=2.412 GHz  Access Point: Not-Associated   
+          Sensitivity:0/0  
+          Retry:off   RTS thr:off   Fragment thr:off
+          Encryption key:off
+          Power Management:off
+          Link Quality=0/100  Signal level=0 dBm  Noise level=0 dBm
+          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+          Tx excessive retries:0  Invalid misc:0   Missed beacon:0
+
+wlan0mon  IEEE 802.11  Mode:Monitor  Frequency:2.457 GHz  Tx-Power=31 dBm   
+          Retry short limit:7   RTS thr:off   Fragment thr:off
+          Power Management:on
 
 			====iw dev====
 
