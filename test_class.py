@@ -20,7 +20,7 @@ class Device:
         self.driver = driver
 
     @classmethod
-    def enumerate(cls):
+    def enumerate(cls):  # TODO: Test on linux <print(Device.enumerate())>
         Device.wireless = []  # empty lists on re.
         Device.misc = []
         re = cmd_find_values("usb-devices", Device._init_keywords, "Bus=",
