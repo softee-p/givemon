@@ -11,6 +11,7 @@ def cmd_grep(target):  # TODO: Update func
         return grep_list.stdout
 
 
+# TODO: FIX THIS IS BROKEN
 def cmd_find_lines(command, keywords_list=""):
     # if keyword == False deactivate search.
 
@@ -153,7 +154,7 @@ def cmd_find_values(command, data_list, split_point, exclusion_list="", inclusio
     if not segment_count:
         segment_count = len(results)
 
-    return results, segment_count
+    return results  # , segment_count
 
 
 # TODO: LINUX TEST2: not tested
