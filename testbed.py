@@ -5,7 +5,9 @@ from my_tools import cmd_find_values, cmd_find_segments
 
 sauce = cmd_find_segments("ls -la", "\n")
 print(sauce)
-
+for line in sauce:
+    if "admin" in line:
+        print(line[0])
 
 
 class Test:
