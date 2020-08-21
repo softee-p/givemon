@@ -51,11 +51,7 @@ class Wireless(Device):
                 self.interfaces.append(Interface(item[0], item[1], item[2],
                                                  item[3], item[4], item[5], item[6]))
 
-        # self._enumerate()
-        # elf.mac = self.interfaces[0].mac
-
-
-    def enumerate(self, interface):
+    def add_interface(self, interface):
         self.interfaces.append(interface)
 
 
