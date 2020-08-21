@@ -1,10 +1,18 @@
-from my_tools import cmd_find_values
+from my_tools import cmd_find_values, cmd_find_segments
+# from device_classes import Device, Wireless, Interface
+
+
+
+sauce = cmd_find_segments("ls -la", "\n")
+print(sauce)
+
 
 
 class Test:
     classes = []
     keys = ["admin", "staff"]
     misc = []
+    print("passed Test!")
 
     def __init__(self, name, age):
         self.name = name
@@ -25,12 +33,13 @@ class Test:
                 print(item[0])
                 cls.classes.append(SubTest(item[0], item[1]))
             else:
-                cls.misc.append(Test(item[0], item[1]))
+                cls.classes.append(Test(item[0], item[1]))
 
 
 class SubTest(Test):
     keys = ["admin", "poo"]
     var = cmd_find_values("ls -la", keys, "\n", "", ["admin"])
+    print("passed Subtest!")
 
     def __init__(self, name, age):
         super().__init__(name, age)
@@ -41,6 +50,4 @@ class SubTest(Test):
                 self.mac = 123123
 
 
-Test.enumeration()
-print(Test.classes[0].age)
 

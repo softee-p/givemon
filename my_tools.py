@@ -11,6 +11,7 @@ def cmd_grep(target):  # TODO: Update func
         return grep_list.stdout
 
 
+# TODO: FIX THIS IS BROKEN
 def cmd_find_lines(command, keywords_list=""):
     # if keyword == False deactivate search.
 
