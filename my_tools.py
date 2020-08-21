@@ -153,7 +153,7 @@ def cmd_find_values(command, data_list, split_point, exclusion_list="", inclusio
     if not segment_count:
         segment_count = len(results)
 
-    return results, segment_count
+    return results  # , segment_count
 
 
 # TODO: LINUX TEST2: not tested
